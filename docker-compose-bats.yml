@@ -1,0 +1,25 @@
+version: '2'
+services:
+  postgis:
+    #restart: always
+    image: kpettijohn/postgis:9.4
+    ports:
+      - "5655:5432"
+    environment:
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_USER=postgres  
+  cmdbuild:
+    build: .
+    image: rsilva4/cmdbuild
+    ports:
+      - "8688:8080"
+    environment:
+      - DB_NAME=cmdbuild
+      - BIM_ACTIVE=false
+      - BIM_USER=teststring
+      - GIS_ENABLED=false
+      - GEOSERVER_ON_OFF=off
+      - GEOSERVER_USER=teststring
+      - DEFAULT_LANG=ru
+    links:
+      - postgis:postgres      

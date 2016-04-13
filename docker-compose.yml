@@ -1,0 +1,30 @@
+version: '2'
+services:
+  postgis:    
+    image: kpettijohn/postgis:9.4 #mdillon/postgis:9.5
+    ports:
+      - "5555:5432"
+    environment:
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_USER=postgres
+  geoserver:
+    image: kartoza/geoserver:2.6.1
+    ports:
+      - "8889:8080"
+  bimserver:
+    image: rsilva4/bimserver
+    ports:
+      - "8890:8080"
+  openmaint:
+    image: rsilva4/openmaint
+    ports:
+      - "8888:8080"
+    environment:
+      - BIM_ACTIVE=true
+      - GIS_ENABLED=true
+      - GEOSERVER_ON_OFF=on
+      - DB_NAME=cmdbuild
+    links:
+      - postgis:postgres
+      - geoserver
+      - bimserver
